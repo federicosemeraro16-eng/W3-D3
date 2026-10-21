@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week Project — Settimana III</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <!-- Titolo dell'app + sottotitolo + button tema chiaro/scuro -->
+
+      <h1>Le mie cose da fare</h1>
+    </header>
+
+    <main>
+      <section class="form">
+        <!-- Form di inserimento di nuovi elementi -->
+        <input type="text" id="task-field" placeholder="Cosa devi fare?" />
+        <button type="button" id="add-btn">Aggiungi</button>
+      </section>
+
+      <section class="controlli">
+        <!-- Ricerca live, filtro (select), ordinamento -->
+
+        <button type="button">Tutti</button><button type="button">Attivi</button
+        ><button type="button">Completati</button>
+      </section>
+
+      <section class="statistiche">
+        <!-- Conteggi e/o barre orizzontali -->
+        <p>Attivi:</p>
+      </section>
+
+      <section class="lista">
+        <!-- Container che render() ricostruisce a ogni cambio di stato -->
+      </section>
+
+      <div id="notifica"></div>
+    </main>
+
+    <footer>
+      <!-- Autore, anno -->
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
