@@ -65,8 +65,8 @@ h1 {
   padding: 20px;
 }
 
-.lista input{
-  margin-right: 20px
+.lista input {
+  margin-right: 20px;
 }
 
 .lista button {
@@ -80,9 +80,7 @@ h1 {
   background-color: red;
   border: 2px solid #fff;
   color: #fff;
-  
 }
-
 
 .form button:hover {
   background-color: black;

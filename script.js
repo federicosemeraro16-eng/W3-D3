@@ -101,7 +101,7 @@ const render = () => {
     newTaskSpan.textContent = task.testo;
 
     const newDeleteBtn = document.createElement("button");
-    newDeleteBtn.setAttribute("data-id", tasks.id);
+    newDeleteBtn.setAttribute("data-id", task.id);
 
     newDeleteBtn.textContent = "Elimina";
 
@@ -150,7 +150,11 @@ form.addEventListener("submit", (e) => {
 
 lista.addEventListener("click", (e) => {
   if (e.target.matches("button")) {
-    tasks.splice(e.target.dataset.id, 1);
+    const taskIndex = tasks.findIndex(
+      (task) => task.id === Number(e.target.dataset.id)
+    );
+    if (taskIndex === -1) return;
+    tasks.splice(taskIndex, 1);
 
     console.log(e.target);
     lista.innerHTML = "";
