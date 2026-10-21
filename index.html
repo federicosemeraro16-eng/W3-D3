@@ -15,21 +15,23 @@
 
     <main>
       <section class="form">
+        <form>
         <!-- Form di inserimento di nuovi elementi -->
         <input type="text" id="task-field" placeholder="Cosa devi fare?" />
         <button type="submit" id="add-btn">Aggiungi</button>
+        </form>
       </section>
 
       <section class="controlli">
         <!-- Ricerca live, filtro (select), ordinamento -->
 
-        <button type="button">Tutti</button><button type="button">Attivi</button
-        ><button type="button">Completati</button>
+        <button type="button" id="tuttiBtn">Tutti</button><button type="button" id="attiviBtn">Attivi</button
+        ><button type="button" id="completatiBtn">Completati</button>
       </section>
 
       <section class="statistiche">
         <!-- Conteggi e/o barre orizzontali -->
-        <p>Attivi:</p>
+        <p  id="contatore-p">Attivi:</p>
       </section>
 
       <section class="lista">

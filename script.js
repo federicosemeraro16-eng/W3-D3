@@ -10,10 +10,6 @@ REGOLE
   Tutto il resto e' stato visto in settimana.
 - Niente AI per generare codice. Niente template scaricati.
 */
-const form = document.querySelector(".form");
-const taskfield = document.querySelector("#task-field");
-const controlSection = document.querySelector(".controlli");
-const lista = document.querySelector(".lista");
 
 /* STATO
    In cima al file definisci poche variabili globali:
@@ -22,37 +18,45 @@ const lista = document.querySelector(".lista");
    - una variabile per l'ordinamento corrente
    - una variabile per la stringa di ricerca corrente
 */
+const form = document.querySelector(".form");
+const taskField = document.querySelector("#task-field");
+const formSection = document.querySelector(".form");
+const lista = document.querySelector(".lista");
+const contatorPar = document.querySelector("#contatore-p");
+
+const tasks = [
+  {
+    testo: "Pagare le bollette",
+    completed: false,
+    id: 0,
+  },
+  {
+    testo: "Studiare Javascript",
+    completed: false,
+    id: 1,
+  },
+  {
+    testo: "Comprare il pane",
+    completed: false,
+    id: 2,
+  },
+  {
+    testo: "Chiamare il dentista",
+    completed: false,
+    id: 3,
+  },
+  {
+    testo: "Riposarsi",
+    completed: false,
+    id: 4,
+  },
+];
+
+let filtroCorrente = "tutti";
+let ordinamentoCorrente = "";
+let ricercaCorrente = "";
 
 /* SCRIVI QUI LA TUA RISPOSTA */
-//creo un oggetto base con chiavi id testo e completed
-const tasks = [];
-
-// apro una funzione con add event listener su bottone add-btn
-//dentro la funzione
-//viene letto il valore dell'input
-//creato un nuovo oggetto con chiavi id testo e completed
-//viene creato un id con date now come da slide
-//viene pushato l'oggetto dentro l'array tasks
-
-function createTaskobj() {
-  const taskArg = taskfield.value.trim();
-  if (!taskArg) {
-    const errorPar = document.createElement("p");
-    errorPar.textContent = "Inserire il task da registrare";
-    controlSection.appendChild(errorPar);
-
-    return;
-  }
-  const newTask = {
-    id: Date.now(),
-    testo: taskArg,
-    completed: false,
-  };
-
-  tasks.push(newTask);
-
-  return newTask;
-}
 
 /* RENDER()
    Una sola funzione che ridipinge la lista. A ogni chiamata:
@@ -66,44 +70,47 @@ function createTaskobj() {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
-// chiamo la funzione createtaskobj
-//faccio un foreach
-//creo un nuovo li per ogni task
-//creo un nuovo input
-//ci metto un nuovo attribute type con set attribute checkbox e un altro type con value uguale al id
-//creo un nuovo span
-//ci inserisco come text content il valore del testo
-//creo un nuovo bottone
-//ci metto il testo elimina con text content
-//faccio append child degli elementi creati al nuovo li
-//faccioun append child del nuovo li alla lista ul
-//ritorno newli
 
-function renderlist() {
-   lista.innerHTML=''
-  tasks.forEach((task) => {
+const render = () => {
+  lista.innerHTML = "";
+
+  let taskDaMostrare = [...tasks];
+
+  if (filtroCorrente === "completati") {
+    taskDaMostrare = tasks
+      .filter((task) => task.completed)
+      .sort((a, b) => a - b);
+    render();
+  } else if (filtroCorrente === "attivo") {
+    tasks.filter((task) => !task.completed).sort((a, b) => a.id - b.id);
+    render();
+  }
+
+  taskDaMostrare.forEach((task) => {
     const newLi = document.createElement("li");
-    const doneCheck = document.createElement("input");
+    newLi.setAttribute("data-id", task.id);
 
-    Object.assign(doneCheck, {
+    const newCheck = document.createElement("input");
+    Object.assign(newCheck, {
       type: "checkbox",
+      checked: task.completed,
       id: task.id,
-      value: task.id,
     });
-    const newTaskspan = document.createElement("span");
-    newTaskspan.textContent = task.testo;
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "elimina";
+    const newTaskSpan = document.createElement("span");
+    newTaskSpan.textContent = task.testo;
 
-    newLi.appendChild(doneCheck);
-    newLi.appendChild(newTaskspan);
-    newLi.appendChild(deleteBtn);
+    const newDeleteBtn = document.createElement("button");
+    newDeleteBtn.setAttribute("data-id", `tasks.length + 1`);
+
+    newDeleteBtn.textContent = "Elimina";
+
+    newLi.appendChild(newCheck);
+    newLi.appendChild(newTaskSpan);
+    newLi.appendChild(newDeleteBtn);
     lista.appendChild(newLi);
-
-    return newLi;
   });
-}
+};
 
 /* FORM CON VALIDAZIONE
    addEventListener("submit") sul form.
@@ -118,8 +125,18 @@ function renderlist() {
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  createTaskobj();
-  renderlist();
+  console.log("form inviato");
+  const inputVal = taskField.value.trim();
+  if (!inputVal) {
+    const newErrp = document.createElement("p");
+    newErrp.textContent = `Inserisci una task`;
+    formSection.appendChild(newErrp);
+    return;
+  } else {
+    tasks.push({ testo: inputVal, completed: false, id: Date.now() });
+    //  form.reset();
+    render();
+  }
 });
 
 /* INTERAZIONI BASE — eliminare, modificare, contare
@@ -130,6 +147,19 @@ form.addEventListener("submit", (e) => {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+
+lista.addEventListener("click", (e) => {
+  console.log(e.target);
+  if (e.target.matches("button")) {
+    tasks.splice(e.target.dataset.id, 1);
+    lista.innerHTML = "";
+    render();
+  }
+});
+
+// lista.addEventListener("change",(e)=>{
+//    console.log(e.target.type)
+// })
 
 /* RICERCA, FILTRO, ORDINAMENTO
    - Ricerca live: <input> con event "input". Salva in stato e render().
@@ -186,6 +216,13 @@ form.addEventListener("submit", (e) => {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+
+const contatore = () => {
+  const taskActive = tasks.filter((task) => !task.completed);
+  contatorPar.textContent = `Attivi: ${taskActive.length}`;
+};
+
+console.log(contatore());
 
 /* MULTI-VISTA — lista / card / tabella
    Una variabile globale "vista" che render() legge per decidere quale HTML
