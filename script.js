@@ -101,7 +101,7 @@ const render = () => {
     newTaskSpan.textContent = task.testo;
 
     const newDeleteBtn = document.createElement("button");
-    newDeleteBtn.setAttribute("data-id", `tasks.length + 1`);
+    newDeleteBtn.setAttribute("data-id", tasks.id);
 
     newDeleteBtn.textContent = "Elimina";
 
@@ -149,17 +149,28 @@ form.addEventListener("submit", (e) => {
 /* SCRIVI QUI LA TUA RISPOSTA */
 
 lista.addEventListener("click", (e) => {
-  console.log(e.target);
   if (e.target.matches("button")) {
     tasks.splice(e.target.dataset.id, 1);
+
+    console.log(e.target);
     lista.innerHTML = "";
+    contatore(); // da sistemare perché il contatore deve mostrare solo quelli attivi e non quante attività ci sono totali //
     render();
   }
 });
 
-// lista.addEventListener("change",(e)=>{
-//    console.log(e.target.type)
-// })
+lista.addEventListener("change", (e) => {
+  
+  if (e.target.matches("input")) {
+   tasks.completed = e.target.checked
+   
+  }
+
+//   const taskCompleted = tasks.map((task)=>task.completed)
+//   const newActiveItems = taskCompleted.length
+//   contatore()
+//   render()
+});
 
 /* RICERCA, FILTRO, ORDINAMENTO
    - Ricerca live: <input> con event "input". Salva in stato e render().
