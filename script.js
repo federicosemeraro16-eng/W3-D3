@@ -23,6 +23,7 @@ const taskField = document.querySelector("#task-field");
 const formSection = document.querySelector(".form");
 const lista = document.querySelector(".lista");
 const contatorPar = document.querySelector("#contatore-p");
+const controlli = document.querySelector(".controlli");
 
 const tasks = [
   {
@@ -79,11 +80,13 @@ const render = () => {
   if (filtroCorrente === "completati") {
     taskDaMostrare = tasks
       .filter((task) => task.completed)
-      .sort((a, b) => a - b);
-    render();
-  } else if (filtroCorrente === "attivo") {
-    tasks.filter((task) => !task.completed).sort((a, b) => a.id - b.id);
-    render();
+      .sort((a, b) => a.id - b.id);
+    
+  } else if (filtroCorrente === "attivi") {
+    taskDaMostrare = tasks
+      .filter((task) => !task.completed)
+      .sort((a, b) => a.id - b.id);
+    
   }
 
   taskDaMostrare.forEach((task) => {
@@ -134,7 +137,7 @@ form.addEventListener("submit", (e) => {
     return;
   } else {
     tasks.push({ testo: inputVal, completed: false, id: Date.now() });
-    //  form.reset();
+    //  form.reset;
     render();
   }
 });
@@ -151,7 +154,7 @@ form.addEventListener("submit", (e) => {
 lista.addEventListener("click", (e) => {
   if (e.target.matches("button")) {
     const taskIndex = tasks.findIndex(
-      (task) => task.id === Number(e.target.dataset.id)
+      (task) => task.id === Number(e.target.dataset.id),
     );
     if (taskIndex === -1) return;
     tasks.splice(taskIndex, 1);
@@ -164,16 +167,12 @@ lista.addEventListener("click", (e) => {
 });
 
 lista.addEventListener("change", (e) => {
-  
   if (e.target.matches("input")) {
-   tasks.completed = e.target.checked
+    tasks.completed = e.target.checked;
    
   }
 
-//   const taskCompleted = tasks.map((task)=>task.completed)
-//   const newActiveItems = taskCompleted.length
-//   contatore()
-//   render()
+
 });
 
 /* RICERCA, FILTRO, ORDINAMENTO
@@ -184,6 +183,20 @@ lista.addEventListener("change", (e) => {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+
+controlli.addEventListener("click", (e) => {
+  console.log(e.target.id);
+  if (e.target.id === "attiviBtn") {
+    filtroCorrente = "attivi";
+  } else if (e.target.id === "completatiBtn") {
+    filtroCorrente = "completati";
+  } else {
+    filtroCorrente ="tutti"
+    
+  }
+
+  render()
+});
 
 /* NOTIFICHE TEMPORANEE
    Funzione notifica(testo) che imposta il testo del <div id="notifica">,
